@@ -53,6 +53,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\McMaterialImage.cs" />
+    <Compile Include="Core\Data\DataBase.cs" />
+    <Compile Include="Core\Data\MaterialImageData.cs" />
+    <Compile Include="Core\Extensions\ImageExtensions.cs" />
+    <Compile Include="Core\Objects\CurveObjectBase.cs" />
+    <Compile Include="Core\Objects\MaterialImageObject.cs" />
     <Compile Include="MaterialCutterCommand.cs" />
     <Compile Include="MaterialCutterPlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +66,7 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\plugin-utility.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

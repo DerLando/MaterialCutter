@@ -1,4 +1,8 @@
-﻿namespace MaterialCutter
+﻿using System;
+using System.Collections.Generic;
+using MaterialCutter.Core.Data;
+
+namespace MaterialCutter
 {
     ///<summary>
     /// <para>Every RhinoCommon .rhp assembly must have one and only one PlugIn-derived
@@ -11,6 +15,9 @@
     public class MaterialCutterPlugIn : Rhino.PlugIns.PlugIn
 
     {
+        public Dictionary<Guid, MaterialImageData> ImageDataTemps { get; set; } =
+            new Dictionary<Guid, MaterialImageData>();
+
         public MaterialCutterPlugIn()
         {
             Instance = this;
