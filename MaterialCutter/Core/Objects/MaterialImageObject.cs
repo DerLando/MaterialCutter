@@ -20,14 +20,30 @@ namespace MaterialCutter.Core.Objects
         protected override void OnDeleteFromDocument(RhinoDoc doc)
         {
             RhinoApp.WriteLine($"{Attributes.ObjectId} OnDelete called!");
-            MaterialCutterPlugIn.Instance.ImageDataTemps.Add(Id, Data);
+            // Add data to temporary dict on PlugIn class
+            if (MaterialCutterPlugIn.Instance.ImageDataTemps.ContainsKey(Id))
+            {
+                MaterialCutterPlugIn.Instance.ImageDataTemps[Id] = Data;
+            }
+            else
+            {
+                MaterialCutterPlugIn.Instance.ImageDataTemps.Add(Id, Data);
+            }
+
             base.OnDeleteFromDocument(doc);
         }
 
         protected override void OnAddToDocument(RhinoDoc doc)
         {
             // TODO: Load data properties back from dictionary
-            // TODO: Write a function to get width and height from curve object (hint: use this.CurveGeometry)
+            if (MaterialCutterPlugIn.Instance.ImageDataTemps.ContainsKey(Id))
+            {
+                var original = MaterialCutterPlugIn.Instance.ImageDataTemps[Id];
+                var current = Data;
+                // TODO: Write a function to get width and height from curve object (hint: use this.CurveGeometry)
+                current.CopyPropertiesFrom(original);
+                current.CalculateWidthHeightFromCurve(CurveGeometry as PolylineCurve);
+            }
             RhinoApp.WriteLine($"{Attributes.ObjectId} OnAdd called!");
             base.OnAddToDocument(doc);
         }

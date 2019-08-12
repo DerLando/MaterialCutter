@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MaterialCutter.Core.Extensions;
 using MaterialCutter.Core.Objects;
 using Rhino.Display;
+using Rhino.DocObjects.Custom;
 using Rhino.Geometry;
 
 namespace MaterialCutter.Core.Data
@@ -17,7 +18,7 @@ namespace MaterialCutter.Core.Data
         public double Width { get; set; }
         public double Height { get; set; }
 
-        public DisplayBitmap DisplayBitmap { get; set; }
+        //public DisplayBitmap DisplayBitmap { get; set; }
 
         public Rectangle3d Boundary => new Rectangle3d(Plane, Width, Height);
         public int WidthInt => Convert.ToInt32(Math.Round(Width));
@@ -32,17 +33,43 @@ namespace MaterialCutter.Core.Data
             Width = width;
             Height = height;
 
-            CreateDisplayBitmap();
+            //CreateDisplayBitmap();
         }
 
-        private void CreateDisplayBitmap()
-        {
-            DisplayBitmap = new DisplayBitmap(ImageExtensions.ResizeImage(Image, WidthInt, HeightInt));
-        }
+        //private void CreateDisplayBitmap()
+        //{
+        //    DisplayBitmap = new DisplayBitmap(ImageExtensions.ResizeImage(Image, WidthInt, HeightInt));
+        //}
 
         public MaterialImageObject GetCustomObject()
         {
             return new MaterialImageObject(this, Boundary.ToPolyline().ToPolylineCurve());
+        }
+
+        protected override void OnDuplicate(UserData source)
+        {
+            base.OnDuplicate(source);
+        }
+
+        public void CopyPropertiesFrom(MaterialImageData other)
+        {
+            Plane = other.Plane;
+
+            Image = other.Image;
+            Width = other.Width;
+            Height = other.Height;
+        }
+
+        public void CalculateWidthHeightFromCurve(PolylineCurve curve)
+        {
+            var rect = Rectangle3d.CreateFromPolyline(curve.ToPolyline());
+            Width = rect.Width;
+            Height = rect.Height;
+
+            var plane = this.Plane;
+            plane.Origin = rect.Corner(0);
+
+            Plane = plane;
         }
     }
 }
